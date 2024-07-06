@@ -1,9 +1,9 @@
 const duo_api = require("@duosecurity/duo_api");
 
 duo_api.Client.prototype.asyncApiCall = async function (
-  method: any,
-  path: any,
-  params: any,
+  method: string,
+  path: string,
+  params: object,
 ) {
   return new Promise((resolve, reject) => {
     try {
@@ -17,11 +17,11 @@ duo_api.Client.prototype.asyncApiCall = async function (
   });
 };
 
-duo_api.Client.prototype.get = async function (path: any, params: any) {
+duo_api.Client.prototype.get = async function (path: string, params: object) {
   return this.asyncApiCall("GET", path, params);
 };
 
-duo_api.Client.prototype.post = async function (path: any, params: any) {
+duo_api.Client.prototype.post = async function (path: string, params: object) {
   return this.asyncApiCall("POST", path, params);
 };
 
