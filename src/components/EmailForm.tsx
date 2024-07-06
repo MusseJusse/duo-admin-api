@@ -12,11 +12,11 @@ export const EmailForm = () => {
   useEffect(() => {
     if (state == undefined) {
     } else if (state.status == "approved") {
-      toast.success("Approved");
+      toast.success("Approved", { duration: 3000 });
     } else if (state.status == "denied") {
-      toast.warning("Denied");
+      toast.warning("Denied", { duration: 3000 });
     } else if (state.status == "error") {
-      toast.error("User not found");
+      toast.error("User not found", { duration: 3000 });
     }
   }, [state]);
 
