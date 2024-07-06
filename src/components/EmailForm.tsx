@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 
 export const EmailForm = () => {
-  const [state, formAction] = useFormState(sendPush, { status: null });
+  const [state, formAction] = useFormState(sendPush, { status: "" });
 
   useEffect(() => {
     if (state == undefined) {

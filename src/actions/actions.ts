@@ -1,11 +1,18 @@
 "use server";
 
 import { z } from "zod";
-import { request } from "../app/duo";
+import { request } from "../utils/duo";
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-export const sendPush = async (state: any, formdata: FormData) => {
+export const sendPush = async (
+  state: { status: string } | undefined,
+  formdata: FormData,
+) => {
+  if (!state) {
+    state = { status: "" }; // or any default value
+  }
+
   const form = Object.fromEntries(formdata.entries());
   const { email } = z.object({ email: z.string() }).parse(form);
 
@@ -30,6 +37,7 @@ export const sendPush = async (state: any, formdata: FormData) => {
   const push_id = push["response"]["push_id"];
   console.log(push_id);
   console.log(`push sent to ${user["alias1"]}'s ${user["phones"][0]["model"]}`);
+
   let approved = false;
   let denied = false;
 
