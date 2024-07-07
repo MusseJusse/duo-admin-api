@@ -10,7 +10,13 @@ export const sendPush = async (
   formdata: FormData,
 ) => {
   const form = Object.fromEntries(formdata.entries());
-  const { email } = z.object({ email: z.string() }).parse(form);
+  const parseResult = z.object({ email: z.string().email() }).safeParse(form);
+
+  if (!parseResult.success) {
+    return { status: "input error" };
+  }
+
+  const { email } = parseResult.data;
 
   const userResponse = await request.get("/admin/v1/users", {
     email,

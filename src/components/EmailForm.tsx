@@ -15,6 +15,8 @@ export const EmailForm = () => {
       toast.success("Approved", { duration: 3000 });
     } else if (state.status == "denied") {
       toast.warning("Denied", { duration: 3000 });
+    } else if (state.status == "input error") {
+      toast.error("Email required", { duration: 1000 });
     } else if (state.status == "error") {
       toast.error("User not found", { duration: 3000 });
     }
