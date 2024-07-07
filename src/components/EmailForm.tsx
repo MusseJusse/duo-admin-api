@@ -2,7 +2,7 @@
 
 import { useFormState } from "react-dom";
 import { sendPush } from "../actions/actions";
-import { SubmitButton } from "./submit";
+import { SubmitButton } from "./SubmitButton";
 import { toast } from "sonner";
 import { useEffect } from "react";
 
