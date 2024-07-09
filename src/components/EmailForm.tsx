@@ -7,20 +7,26 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 
 export const EmailForm = () => {
-  const [state, formAction] = useFormState(sendPush, { status: "" });
+  const [{ status }, formAction] = useFormState(sendPush, { status: "" });
 
   useEffect(() => {
-    if (state == undefined) {
-    } else if (state.status == "approved") {
-      toast.success("Approved", { duration: 3000 });
-    } else if (state.status == "denied") {
-      toast.warning("Denied", { duration: 3000 });
-    } else if (state.status == "input error") {
-      toast.error("Email required", { duration: 1000 });
-    } else if (state.status == "error") {
-      toast.error("User not found", { duration: 3000 });
+    switch (status) {
+      case "approved":
+        toast.success("Approved", { duration: 3000 });
+        break;
+      case "denied":
+        toast.warning("Denied", { duration: 3000 });
+        break;
+      case "input error":
+        toast.error("Email required", { duration: 1000 });
+        break;
+      case "error":
+        toast.error("User not found", { duration: 3000 });
+        break;
+      default:
+        break;
     }
-  }, [state]);
+  }, [status]);
 
   return (
     <form action={formAction} className="flex h-10 gap-4">
