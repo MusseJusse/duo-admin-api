@@ -25,44 +25,35 @@ export const sendPush = async (
     email,
   });
 
-  if (userResponse.response.length == 0) {
-    console.log(`${email} not found`);
+  const user = userResponse.response[0];
+  const phone = user?.phones[0];
+  if (!phone || !user) {
     return { status: "error" };
   }
 
-  const user_id = userResponse.response[0]?.user_id;
-  const phone_id = userResponse.response[0]?.phones[0]?.phone_id;
-
   const push: ISentPushResponse = await request.post(
-    `/admin/v1/users/${user_id}/send_verification_push`,
-    { phone_id },
+    `/admin/v1/users/${user.user_id}/send_verification_push`,
+    { phone_id: phone.phone_id },
   );
 
   const push_id = push.response.push_id;
-  console.log(
-    `${push_id} sent to ${userResponse.response[0]?.alias1}'s ${userResponse.response[0]?.phones[0]?.model}`,
-  );
+  console.log(`${push_id} sent to ${user.alias1}'s ${phone.model}`);
 
-  let approved = false;
-  let denied = false;
-
-  while (!approved && !denied) {
+  while (true) {
     await delay(1000);
     const pushResponse: IReceivedPushResponse = await request.get(
-      `/admin/v1/users/${user_id}/verification_push_response`,
+      `/admin/v1/users/${user.user_id}/verification_push_response`,
       { push_id },
     );
 
     const result = pushResponse.response.result;
-    if (result == "approve") {
-      approved = true;
-      console.log(`${push_id} approved by ${userResponse.response[0]?.alias1}`);
+    if (result === "approve") {
+      console.log(`${push_id} approved by ${user.alias1}`);
       return { status: "approved" };
     }
 
-    if (result == "deny" || result == "fraud" || result == "unknown error") {
-      denied = true;
-      console.log(`${push_id} denied by ${userResponse.response[0]?.alias1}`);
+    if (["deny", "fraud", "unknown error"].includes(result)) {
+      console.log(`${push_id} denied by ${user.alias1}`);
       return { status: "denied" };
     }
   }
